@@ -8,12 +8,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure--(5w-!_t7#qr(#eq2$85-qen!u94^kb05z-@m$q-@-hg1c3$56'
+SECRET_KEY = 'django-insecure-t^eynv)%k)+ww&z%k*ytuot^c9qn)+o#3^k)osm9t_ke!99dfb'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = []
+
 
 # Application definition
 
@@ -24,24 +25,20 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'hayya_alal_falah',
+
+
     'rest_framework',
     'corsheaders',
 
-    # Custom apps
-    # 'users',
-    # 'salah_tracker',
-    # 'notifications',
-]
-CORS_ALLOWED_ORIGINS = [
-    # for React Frontend 
-    "http://localhost:3000",  
-    # for Django Frontend 
-    # "http://127.0.0.1:8000",  
+
+    # Custom Apps (Inside 'apps/')
+    'apps.users',
+    'apps.salah_tracker',
+    'apps.hadiths',
+    'apps.notifications',
 ]
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -51,7 +48,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'hayya_alal_falah.urls'
+ROOT_URLCONF = 'config.urls'
 
 TEMPLATES = [
     {
@@ -69,7 +66,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'hayya_alal_falah.wsgi.application'
+WSGI_APPLICATION = 'config.wsgi.application'
 
 
 # Database
