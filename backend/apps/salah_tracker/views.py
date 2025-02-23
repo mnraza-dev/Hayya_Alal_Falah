@@ -1,13 +1,18 @@
-from rest_framework import viewsets, permissions
+from rest_framework import viewsets, permissions, filters
+from django_filters.rest_framework import DjangoFilterBackend
 from .models import SalahRecord
 from .serializers import SalahRecordSerializer
+from .filters import SalahRecordFilter
 class SalahRecordViewSet(viewsets.ModelViewSet):
     queryset = SalahRecord.objects.all()
     serializer_class = SalahRecordSerializer
     permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
+    filterset_class = SalahRecordFilter
+    ordering_fields = ["date"]  
 
     def get_queryset(self):
-        return SalahRecord.objects.filter(user=self.request.user)  # ✅ Only return user's data
+        return self.queryset.filter(user=self.request.user)  
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)  # ✅ Auto-assign logged-in user
+        serializer.save(user=self.request.user)  
