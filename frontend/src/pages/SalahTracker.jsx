@@ -14,7 +14,7 @@ const SalahTracker = () => {
       } catch (error) {
         console.error("Error fetching Salah records:", error);
         if (error.response?.status === 401) {
-          navigate("/"); 
+          navigate("/");
         }
       }
     };
@@ -24,13 +24,17 @@ const SalahTracker = () => {
 
   return (
     <div>
-      <h2>Salah Tracker</h2>
+      <h1 class="text-3xl font-bold underline">Salah Tracker</h1>
       <ul>
-        {salahRecords.length === 0 ? <p>No records found.</p> : salahRecords.map((record) => (
-          <li key={record.id}>
-            {record.prayer_name} - {record.status} on {record.date}
-          </li>
-        ))}
+        {salahRecords.length === 0 ? (
+          <p>No records found.</p>
+        ) : (
+          salahRecords.map((record) => (
+            <li key={record.id}>
+              {record.prayer_name} - {record.status} on {record.date}
+            </li>
+          ))
+        )}
       </ul>
     </div>
   );
