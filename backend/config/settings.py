@@ -31,8 +31,8 @@ INSTALLED_APPS = [
     'corsheaders',
 
 
-    # Custom Apps (Inside 'apps/')
-    'apps.users',
+    # Custom Apps 
+    # 'apps.users',
     'apps.salah_tracker',
     'apps.hadiths',
     'apps.notifications',
