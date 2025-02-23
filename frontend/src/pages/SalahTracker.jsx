@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import dayjs from "dayjs";
 import useSalahRecords from "../hooks/useSalahRecords";
 import useCurrentPrayer from "../hooks/useCurrentPrayer";
@@ -7,11 +7,10 @@ import DayNavigation from "../components/DayNavigation";
 import SalahConfirmation from "../components/SalahConfirmation";
 import SalahRecordsList from "../components/SalahRecordsList";
 
-
 const SalahTracker = () => {
   const [selectedDate, setSelectedDate] = useState(dayjs().format("YYYY-MM-DD"));
-  const salahRecords = useSalahRecords(selectedDate);
-
+  const [salahRecords, setSalahRecords] = useState([]);
+  
   const prayerTimes = useMemo(
     () => [
       { name: "Fajr", start: "05:00", end: "06:30" },
@@ -22,27 +21,21 @@ const SalahTracker = () => {
     ],
     []
   );
-  const handleStatusChange = async (prayerName, newStatus) => {
-    try {
-      // Send a PUT request to the backend to update the Salah record status
-      await axios.put("/salah_tracker/api/salah/update_status/", {
-        prayer_name: prayerName,
-        status: newStatus,
-        date: selectedDate,
-      });
 
-      // Update the Salah record in local state without duplication
-      setSalahRecords((prevRecords) =>
-        prevRecords.map((record) =>
-          record.prayer_name === prayerName
-            ? { ...record, status: newStatus } // Update the status of the existing record
-            : record // Keep other records unchanged
-        )
-      );
-    } catch (error) {
-      console.error("Error updating Salah record:", error);
-    }
-  };
+  useEffect(() => {
+    const fetchSalahRecords = async () => {
+      try {
+        const response = await axios.get("/salah_tracker/api/salah/", {
+          params: { date: selectedDate },
+        });
+        setSalahRecords(response.data);
+      } catch (error) {
+        console.error("Error fetching Salah records:", error);
+      }
+    };
+
+    fetchSalahRecords();
+  }, [selectedDate]);
 
   const currentPrayer = useCurrentPrayer(prayerTimes);
 
@@ -58,37 +51,53 @@ const SalahTracker = () => {
     }
   };
 
+  const handleStatusChange = async (prayerName, newStatus) => {
+    try {
+      await axios.put("/salah_tracker/api/salah/update_status/", {
+        prayer_name: prayerName,
+        status: newStatus,
+        date: selectedDate,
+      });
+
+      setSalahRecords((prevRecords) =>
+        prevRecords.map((record) =>
+          record.prayer_name === prayerName
+            ? { ...record, status: newStatus }
+            : record
+        )
+      );
+    } catch (error) {
+      console.error("Error updating Salah record:", error);
+    }
+  };
+
   const handleConfirmPrayer = async () => {
     if (currentPrayer) {
       const currentStatus = salahRecords.find(
         (record) => record.prayer_name === currentPrayer
       )?.status;
-  
-      const newStatus = currentStatus === "completed" ? "missing" : "completed"; // Toggle between completed and missing
-  
+
+      const newStatus = currentStatus === "completed" ? "missing" : "completed";
+
       try {
-        // Make a PUT request to update the Salah record status on the backend
         await axios.put("/salah_tracker/api/salah/update_status/", {
           prayer_name: currentPrayer,
           status: newStatus,
           date: selectedDate,
         });
-  
-        // Update the Salah record in local state without duplication
-        setSalahRecords((prevRecords) => {
-          return prevRecords.map((record) =>
+
+        setSalahRecords((prevRecords) =>
+          prevRecords.map((record) =>
             record.prayer_name === currentPrayer
-              ? { ...record, status: newStatus } // Update the status of the existing record
-              : record // Keep other records unchanged
-          );
-        });
+              ? { ...record, status: newStatus }
+              : record
+          )
+        );
       } catch (error) {
         console.error("Error updating Salah record:", error);
       }
     }
   };
-  
-  
 
   return (
     <div className="min-h-screen bg-black text-gold font-sans p-6 flex flex-col items-center relative">
@@ -111,9 +120,7 @@ const SalahTracker = () => {
         {salahRecords.length === 0 ? (
           <p className="text-center text-gold">No Salah records found for this day.</p>
         ) : (
-         
           <SalahRecordsList salahRecords={salahRecords} handleStatusChange={handleStatusChange} />
-
         )}
       </div>
     </div>
