@@ -1,59 +1,55 @@
-import { useEffect, useState } from "react";
-import axios from "../api/axiosInstance";
-import { useNavigate } from "react-router-dom";
+import { useState, useMemo } from "react";
 import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc";
-import timezone from "dayjs/plugin/timezone";
+import useSalahRecords from "../hooks/useSalahRecords";
+import useCurrentPrayer from "../hooks/useCurrentPrayer";
+import axios from "../api/axiosInstance";
+import DayNavigation from "../components/DayNavigation";
+import SalahConfirmation from "../components/SalahConfirmation";
+import SalahRecordsList from "../components/SalahRecordsList";
 
-dayjs.extend(utc);
-dayjs.extend(timezone);
 
 const SalahTracker = () => {
-  const [salahRecords, setSalahRecords] = useState([]);
   const [selectedDate, setSelectedDate] = useState(dayjs().format("YYYY-MM-DD"));
-  const [currentPrayer, setCurrentPrayer] = useState(null);
-  const navigate = useNavigate();
+  const salahRecords = useSalahRecords(selectedDate);
 
-  useEffect(() => {
-    const fetchSalahRecords = async () => {
-      try {
-        const response = await axios.get(`/salah_tracker/api/salah/?date=${selectedDate}`);
-        setSalahRecords(response.data);
-      } catch (error) {
-        console.error("Error fetching Salah records:", error);
-        if (error.response?.status === 401) {
-          navigate("/");
-        }
-      }
-    };
-    fetchSalahRecords();
-  }, [selectedDate]);
-
-  useEffect(() => {
-    const prayerTimes = [
+  const prayerTimes = useMemo(
+    () => [
       { name: "Fajr", start: "05:00", end: "06:30" },
       { name: "Dhuhr", start: "13:00", end: "16:30" },
       { name: "Asr", start: "16:45", end: "18:30" },
       { name: "Maghrib", start: "18:45", end: "19:45" },
       { name: "Isha", start: "20:00", end: "23:00" },
-    ];
+    ],
+    []
+  );
+  const handleStatusChange = async (prayerName, newStatus) => {
+    try {
+      // Send a PUT request to the backend to update the Salah record status
+      await axios.put("/salah_tracker/api/salah/update_status/", {
+        prayer_name: prayerName,
+        status: newStatus,
+        date: selectedDate,
+      });
 
-    const checkCurrentPrayer = () => {
-      const now = dayjs();
-      const prayer = prayerTimes.find(
-        (p) => now.isAfter(dayjs(`${dayjs().format("YYYY-MM-DD")}T${p.start}`)) &&
-               now.isBefore(dayjs(`${dayjs().format("YYYY-MM-DD")}T${p.end}`))
+      // Update the Salah record in local state without duplication
+      setSalahRecords((prevRecords) =>
+        prevRecords.map((record) =>
+          record.prayer_name === prayerName
+            ? { ...record, status: newStatus } // Update the status of the existing record
+            : record // Keep other records unchanged
+        )
       );
-      setCurrentPrayer(prayer ? prayer.name : null);
-    };
+    } catch (error) {
+      console.error("Error updating Salah record:", error);
+    }
+  };
 
-    checkCurrentPrayer();
-    const interval = setInterval(checkCurrentPrayer, 60000);
-    return () => clearInterval(interval);
-  }, []);
+  const currentPrayer = useCurrentPrayer(prayerTimes);
 
   const handlePrevDay = () => {
-    setSelectedDate((prev) => dayjs(prev).subtract(1, "day").format("YYYY-MM-DD"));
+    setSelectedDate((prev) =>
+      dayjs(prev).subtract(1, "day").format("YYYY-MM-DD")
+    );
   };
 
   const handleNextDay = () => {
@@ -64,45 +60,60 @@ const SalahTracker = () => {
 
   const handleConfirmPrayer = async () => {
     if (currentPrayer) {
+      const currentStatus = salahRecords.find(
+        (record) => record.prayer_name === currentPrayer
+      )?.status;
+  
+      const newStatus = currentStatus === "completed" ? "missing" : "completed"; // Toggle between completed and missing
+  
       try {
-        await axios.post("/salah_tracker/api/salah/", { prayer_name: currentPrayer, status: "completed", date: selectedDate });
-        setSalahRecords([...salahRecords, { prayer_name: currentPrayer, status: "completed", date: selectedDate }]);
+        // Make a PUT request to update the Salah record status on the backend
+        await axios.put("/salah_tracker/api/salah/update_status/", {
+          prayer_name: currentPrayer,
+          status: newStatus,
+          date: selectedDate,
+        });
+  
+        // Update the Salah record in local state without duplication
+        setSalahRecords((prevRecords) => {
+          return prevRecords.map((record) =>
+            record.prayer_name === currentPrayer
+              ? { ...record, status: newStatus } // Update the status of the existing record
+              : record // Keep other records unchanged
+          );
+        });
       } catch (error) {
         console.error("Error updating Salah record:", error);
       }
     }
   };
+  
+  
 
   return (
     <div className="min-h-screen bg-black text-gold font-sans p-6 flex flex-col items-center relative">
       <h2 className="text-3xl font-arabic font-bold mb-6">Salah Tracker</h2>
-      <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
-        <button onClick={handlePrevDay} className="bg-gold text-black px-4 py-2 rounded-lg font-bold hover:bg-opacity-80">← Prev Day</button>
-      </div>
-      <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
-        <button onClick={handleNextDay} disabled={selectedDate === dayjs().format("YYYY-MM-DD")} className="bg-gold text-black px-4 py-2 rounded-lg font-bold hover:bg-opacity-80 disabled:opacity-50">Next Day →</button>
-      </div>
+      <DayNavigation
+        handlePrevDay={handlePrevDay}
+        handleNextDay={handleNextDay}
+        selectedDate={selectedDate}
+      />
       <div className="w-full max-w-2xl bg-black p-6 rounded-xl shadow-lg border border-gold text-center">
-        <h3 className="text-2xl font-bold mb-4">{dayjs(selectedDate).format("DD MMMM YYYY")}</h3>
+        <h3 className="text-2xl font-bold mb-4">
+          {dayjs(selectedDate).format("DD MMMM YYYY")}
+        </h3>
         {currentPrayer && (
-          <div className="mb-4 p-4 bg-gold text-black rounded-lg">
-            <p className="text-lg  font-bold">Did you pray {currentPrayer}?</p>
-            <button onClick={handleConfirmPrayer} className="mt-2 bg-gold border-gold border-2	cursor-pointer text-gold px-4 py-2 rounded-lg font-bold hover:bg-opacity-80">Yes, I did</button>
-          </div>
+          <SalahConfirmation
+            currentPrayer={currentPrayer}
+            handleConfirmPrayer={handleConfirmPrayer}
+          />
         )}
         {salahRecords.length === 0 ? (
           <p className="text-center text-gold">No Salah records found for this day.</p>
         ) : (
-          <ul className="divide-y divide-gold">
-            {salahRecords.map((record) => (
-              <li key={record.id} className="flex justify-between items-center p-4">
-                <span className="font-medium text-lg">{record.prayer_name}</span>
-                <span className={`px-3 py-1 rounded text-sm font-bold ${record.status === "completed" ? "bg-green-500 text-white" : "bg-red-500 text-white"}`}>
-                  {record.status}
-                </span>
-              </li>
-            ))}
-          </ul>
+         
+          <SalahRecordsList salahRecords={salahRecords} handleStatusChange={handleStatusChange} />
+
         )}
       </div>
     </div>
