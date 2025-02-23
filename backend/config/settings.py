@@ -30,7 +30,7 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'corsheaders',
-
+    'django_filters',
 
     # Custom Apps
     'apps.users',
@@ -44,7 +44,7 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
-     'DEFAULT_PERMISSION_CLASSES': (
+    'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.AllowAny',  # 🔹 Allow public access by default
     ),
     # 'DEFAULT_PERMISSION_CLASSES': (
