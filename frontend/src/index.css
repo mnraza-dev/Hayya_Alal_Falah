@@ -1,1 +1,48 @@
 @import "tailwindcss";
+
+:root {
+  --color-gold: #FFD700;
+  --color-black: #000000;
+
+  --font-arabic: "Amiri", "Scheherazade", "Noto Naskh Arabic", serif;
+  --font-sans: "Poppins", "Inter", "Lato", sans-serif;
+}
+
+body {
+  background-color: var(--color-black);
+  color: var(--color-gold);
+  font-family: var(--font-sans);
+}
+.bg-gold{
+  background-color: var(--color-gold);
+  color: var(--color-black);
+}
+
+/* Button Styling */
+.btn-primary {
+  background-color: var(--color-gold);
+  color: var(--color-black);
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: bold;
+}
+
+.btn-primary:hover {
+  opacity: 0.8;
+}
+
+/* Card Styling */
+.card {
+  background-color: var(--color-black);
+  color: var(--color-gold);
+  padding: 16px;
+  border-radius: 12px;
+  border: 2px solid var(--color-gold);
+  box-shadow: 0px 4px 10px rgba(255, 215, 0, 0.2);
+}
+
+/* Typography */
+h1, h2, h3 {
+  font-family: var(--font-arabic);
+  color: var(--color-gold);
+}

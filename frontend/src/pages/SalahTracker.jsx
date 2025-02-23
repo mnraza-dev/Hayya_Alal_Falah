@@ -23,7 +23,7 @@ const SalahTracker = () => {
   }, []);
 
   return (
-    <div>
+    <div className="p-4">
       <h1 class="text-3xl font-bold underline">Salah Tracker</h1>
       <ul>
         {salahRecords.length === 0 ? (
