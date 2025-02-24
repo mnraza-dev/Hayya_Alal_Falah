@@ -3,7 +3,8 @@
 > A Qada Salah tracker web application to help Muslims keep track of missed prayers and stay motivated with Hadith reminders.
 
 ### **📌 Overview**
-Hayya Alal Falah is a **full-stack web application** built with **Django REST Framework (backend) and React (frontend using Vite + pnpm)**. It allows users to:
+Hayya Alal Falah is a **full-stack web application** built with **Django REST Framework (backend) and React (frontend using Vite + pnpm)**. 
+It allows users to:
 ✅ **Track missed & completed Salah (Qada Salah)**  
 ✅ **Receive Hadith & motivational messages**  
 ✅ **Set reminders & notifications** (coming in future phases)  
@@ -120,4 +121,3 @@ Pull requests are welcome! Please open an issue first for major changes. Follow 
 For any queries, reach out to [your email or GitHub].
 
 🚀 **Hayya Alal Falah – Track, Pray, Succeed!**
-
