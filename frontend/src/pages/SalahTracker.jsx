@@ -1,13 +1,17 @@
 import { useState, useMemo, useEffect } from "react";
+
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import axios from "../api/axiosInstance";
 import dayjs from "dayjs";
 import useSalahRecords from "../hooks/useSalahRecords";
 import useCurrentPrayer from "../hooks/useCurrentPrayer";
-import axios from "../api/axiosInstance";
 import DayNavigation from "../components/DayNavigation";
 import SalahConfirmation from "../components/SalahConfirmation";
 import SalahRecordsList from "../components/SalahRecordsList";
 
 const SalahTracker = () => {
+
   const [selectedDate, setSelectedDate] = useState(dayjs().format("YYYY-MM-DD"));
   const [salahRecords, setSalahRecords] = useState([]);
   
@@ -101,8 +105,12 @@ const SalahTracker = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black text-gold font-sans p-6 flex flex-col items-center relative">
-      <h2 className="text-3xl font-arabic font-bold mb-6">Salah Tracker</h2>
+    <div  className={`min-h-screen p-6 flex flex-col items-center transition-colors duration-300 bg-[#141E30] text-[#EDEDED]" : "bg-white text-black"
+    }`}>
+       <div className="w-full max-w-2xl flex justify-between items-center mb-6">
+        <h2 className="text-3xl font-bold">Salah Tracker</h2>
+       
+      </div>
       <DayNavigation
         handlePrevDay={handlePrevDay}
         handleNextDay={handleNextDay}
