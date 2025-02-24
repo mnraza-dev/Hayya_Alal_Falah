@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'apps.users',
     'apps.salah_tracker',
     'apps.hadiths',
+    'apps.challenges',
     'apps.notifications',
 ]
 
