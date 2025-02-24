@@ -1,4 +1,3 @@
-// components/SalahRecordsList.js
 const SalahRecordsList = ({ salahRecords, handleStatusChange }) => (
   <ul className="divide-y divide-gold">
     {salahRecords.map((record) => (
@@ -15,7 +14,7 @@ const SalahRecordsList = ({ salahRecords, handleStatusChange }) => (
         </span>
         <button
           onClick={() => handleStatusChange(record.prayer_name, record.status === "completed" ? "missing" : "completed")}
-          className="ml-4 bg-gold text-black px-4 py-2 rounded-lg font-bold hover:bg-opacity-80"
+          className="cursor-pointer ml-4 bg-gold text-black px-4 py-2 rounded-lg font-bold hover:bg-opacity-80"
         >
           {record.status === "completed" ? "Mark as Missing" : "Mark as Completed"}
         </button>

@@ -1,7 +1,5 @@
-// components/SalahConfirmation.js
 const SalahConfirmation = ({ currentPrayer, currentStatus, handleStatusChange }) => {
   const toggleStatus = () => {
-    // Toggle the status based on the current one
     const newStatus = currentStatus === "completed" ? "missing" : "completed";
     handleStatusChange(currentPrayer, newStatus);
   };

@@ -58,18 +58,19 @@ const SalahTracker = () => {
         status: newStatus,
         date: selectedDate,
       });
-
-      setSalahRecords((prevRecords) =>
-        prevRecords.map((record) =>
+  
+      setSalahRecords((prevRecords) => {
+        return prevRecords.map((record) =>
           record.prayer_name === prayerName
             ? { ...record, status: newStatus }
             : record
-        )
-      );
+        );
+      });
     } catch (error) {
       console.error("Error updating Salah record:", error);
     }
   };
+  
 
   const handleConfirmPrayer = async () => {
     if (currentPrayer) {
