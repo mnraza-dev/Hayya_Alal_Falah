@@ -26,7 +26,6 @@ class SalahRecordViewSet(viewsets.ModelViewSet):
         date = request.data.get("date")
         prayer_status = request.data.get("status")  # Avoid conflict with `status` module
 
-        # Validate inputs
         if not prayer_name or not date or not prayer_status:
             return Response({"error": "Missing required fields"}, status=status.HTTP_400_BAD_REQUEST)
 
