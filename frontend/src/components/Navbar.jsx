@@ -41,6 +41,9 @@ const Navbar = () => {
         <Link to="/salah-tracker" className="mr-4 text-gold hover:text-opacity-80 transition">
           Salah Tracker
         </Link>
+        <Link to="/challenges" className="mr-4 text-gold hover:text-opacity-80 transition">
+          Challenges
+        </Link>
         <Link to="/hadith" className="mr-4 text-gold hover:text-opacity-80 transition">
           Hadith
         </Link>
