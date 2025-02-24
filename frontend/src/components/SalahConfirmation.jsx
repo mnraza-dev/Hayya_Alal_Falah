@@ -1,11 +1,11 @@
-import axiosInstance from "../api/axiosInstance";
+// import axiosInstance from "../api/axiosInstance";
 import { Button } from "./ui/button";
 
 const SalahConfirmation = ({
   currentPrayer,
   currentStatus,
   handleStatusChange,
-  selectedDate, // ✅ Receive selectedDate as a prop
+  selectedDate,
 }) => {
   return (
     <div className="mb-4 p-4 bg-gold text-black rounded-lg">
@@ -16,7 +16,7 @@ const SalahConfirmation = ({
           handleStatusChange(
             currentPrayer,
             currentStatus === "completed" ? "missing" : "completed",
-            selectedDate // ✅ Pass selectedDate when calling handleStatusChange
+            selectedDate
           )
         }
         className={`cursor-pointer w-[10rem] px-4 py-2 rounded-lg font-bold transition-opacity ${
