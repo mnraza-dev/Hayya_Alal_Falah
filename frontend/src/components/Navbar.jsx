@@ -30,7 +30,8 @@ const Navbar = () => {
 
   return (
     <nav
-      className={`sticky top-0 w-full backdrop-blur-lg transition-all duration-300 ${
+      className={`sticky top-0 w-full backdrop-blur-lg transition-all duration-300 
+        ${
         isScrolled ? "bg-opacity-80 shadow-xl drop-shadow-lg" : "bg-opacity-100 shadow-md"
       } bg-[#141E30]/30 text-gold p-4 flex justify-between items-center border-b border-b-blue-300 rounded-b-xl`}
     >

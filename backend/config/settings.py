@@ -37,7 +37,9 @@ INSTALLED_APPS = [
     'apps.salah_tracker',
     'apps.hadiths',
     'apps.challenges',
+    'apps.hijri_calendar',
     'apps.notifications',
+    'apps.quiz',
 ]
 
 # Configure Django REST Framework (DRF)
