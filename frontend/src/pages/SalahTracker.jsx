@@ -121,11 +121,15 @@ const SalahTracker = () => {
           {dayjs(selectedDate).format("DD MMMM YYYY")}
         </h3>
         {currentPrayer && (
-          <SalahConfirmation
-            currentPrayer={currentPrayer}
-            handleConfirmPrayer={handleConfirmPrayer}
-          />
+         <SalahConfirmation
+         currentPrayer={currentPrayer}
+         currentStatus={salahRecords.find(record => record.prayer_name === currentPrayer)?.status || "missing"}
+         handleStatusChange={handleStatusChange} 
+         selectedDate={selectedDate} 
+       />
         )}
+
+
         {salahRecords.length === 0 ? (
           <p className="text-center text-gold">No Salah records found for this day.</p>
         ) : (

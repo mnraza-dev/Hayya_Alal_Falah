@@ -10,10 +10,11 @@ const SalahRecordsList = ({ salahRecords, handleStatusChange }) => (
         <CardContent className="flex justify-between items-center w-full">
           <span className=" text-white text-lg font-medium">{record.prayer_name}</span>
           <Button
+          // disabled={ record.status === "completed" ? "disabled" : ""}
             onClick={() => handleStatusChange(record.prayer_name, record.status === "completed" ? "missing" : "completed")}
-            className={`w-[10rem] px-4 py-2 rounded-lg font-bold transition-opacity ${
+            className={`cursor-pointer w-[10rem] px-4 py-2 rounded-lg font-bold transition-opacity ${
               record.status === "completed"
-                ? "bg-green-500 hover:bg-green-600 text-white"
+                ? "bg-green-500  hover:bg-green-600 text-white"
                 : "bg-red-500 hover:bg-red-600 text-white"
             }`}
           >
