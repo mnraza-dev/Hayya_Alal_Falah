@@ -1,13 +1,13 @@
 from django.contrib import admin
-from .models import QuizQuestion, QuizScore
-# Register your models here.
+from .models import QuizScore, QuizQuestion
+
 @admin.register(QuizScore)
 class QuizScoreAdmin(admin.ModelAdmin):
-    list_display = ('longest_streak','total_score', 'user')
-    search_fields = ('user', 'total_score',)
+    list_display = ('longest_streak', 'total_score', 'user')
+    search_fields = ('user__username', 'total_score')
 
     def __str__(self):
-        self.score
+        return str(self.total_score)
 
 @admin.register(QuizQuestion)
 class QuizQuestionAdmin(admin.ModelAdmin):
