@@ -30,7 +30,29 @@ class QuizScore(models.Model):
     total_attempts = models.IntegerField(default=0)
     streak = models.IntegerField(default=0)  # 🔥 Tracks daily streak
     longest_streak = models.IntegerField(default=0)
-    last_played = models.DateField(auto_now=True)  # 🔥 Stores the last quiz date
+    last_played = models.DateField(auto_now=True)  
+    fastest_answer_streak = models.IntegerField(default=0)  
+   
+    def reset_fast_streak(self):
+        self.fastest_answer_streak = 0
+        self.save()
+
+    def check_badges(self):
+        """ Check & Unlock Badges When Achievements Are Met """
+        badges = []
+
+        if self.total_score >= 100:
+            badges.append("100 Club 🎯")
+        if self.total_correct >= 10:
+            badges.append("Hadith Expert 📜")
+        if self.total_correct >= 20:
+            badges.append("Quran Master 📖")
+        if self.streak >= 7:
+            badges.append("Sunnah Streak 🔥")
+        if self.streak >= 30 and self.total_score >= 500:
+            badges.append("Legendary Learner 🏆")
+
+        return badges
 
     def update_streak(self):
         """ Updates the streak based on last played date """
@@ -49,3 +71,11 @@ class QuizScore(models.Model):
 
         self.last_played = today  # Update last played date
         self.save()
+
+class UserBadge(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    badge_name = models.CharField(max_length=255)
+    date_earned = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.badge_name}"

@@ -8,4 +8,5 @@ urlpatterns = [
     path('api/', include('apps.challenges.urls')),
     path("api/", include("apps.hijri_calendar.urls")),
     path("api/quiz/", include("apps.quiz.urls")),
+    path("api/flashcards/", include("apps.flashcards.urls")),
 ]

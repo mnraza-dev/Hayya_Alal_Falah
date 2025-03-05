@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'apps.hijri_calendar',
     'apps.notifications',
     'apps.quiz',
+    'apps.flashcards',
 ]
 
 # Configure Django REST Framework (DRF)
@@ -78,7 +79,6 @@ CORS_ALLOWED_ORIGINS = [
 ]
 
 CORS_ALLOW_CREDENTIALS = True 
-
 
 ROOT_URLCONF = 'config.urls'
 
