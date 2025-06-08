@@ -3,6 +3,7 @@ import Login from "./pages/Login";
 import SalahTracker from "./pages/SalahTracker";
 import Navbar from "./components/Navbar";
 import ChallengesList from "./components/ChallengesList";
+import Dashboard from "./pages/Dashboard";
 
 
 function App() {
@@ -10,7 +11,7 @@ function App() {
     <Router>
       <Navbar />
       <Routes>
-        <Route path="/" element={<Login />} />
+        <Route path="/" element={<Dashboard />} />
         <Route path="/salah-tracker" element={<SalahTracker />} />
         <Route path="/challenges" element={<ChallengesList />} />
       </Routes>
