@@ -16,7 +16,7 @@ const Login = () => {
     try {
       const response = await axios.post("/users/api/token/", credentials);
       localStorage.setItem("access_token", response.data.access);
-      navigate("/salah-tracker"); // Redirect after login
+      navigate("/salah-tracker"); 
     } catch (err) {
       setError("Invalid username or password.");
     }
