@@ -1,6 +1,6 @@
 
 import { useState, useContext } from 'react';
-import axios from '../api/axios';
+import axios from '../api/axiosInstance';
 import { AuthContext } from '../context/AuthContext';
 
 export const useSalah = () => {

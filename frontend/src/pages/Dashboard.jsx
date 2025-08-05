@@ -14,8 +14,6 @@ const Dashboard = () => {
   useEffect(() => {
     fetchSalahRecords(filters);
   }, [filters]);
-
-  // Chart data for missed vs. completed prayers
   const chartData = {
     labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
     datasets: [

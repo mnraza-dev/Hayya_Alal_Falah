@@ -40,7 +40,6 @@ const SalahTracker = () => {
 
     fetchSalahRecords();
   }, [selectedDate]);
-
   const currentPrayer = useCurrentPrayer(prayerTimes);
 
   const handlePrevDay = () => {
